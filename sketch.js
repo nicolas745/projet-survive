@@ -4,8 +4,8 @@ class cercle {
     size = 10;
     couleur = 'white'
     constructor(x, y, size, couleur) {
-        this.x = x;
-        this.y = y;
+        this.x = x + size / 2;
+        this.y = y + size / 2;
         this.size = size;
         this.couleur = couleur;
     }
@@ -57,9 +57,9 @@ class obstacle extends cercle {
         this.direction = rad;
     }
     testCollision(obstacle) {
-        sizeX = this.DirectionX - obstacle.PosX
-        sizeY = this.DirectionY - obstacle.PosY
-        calcDistance = Math.sqrt(Math.pow(sizeX, 2) + Math.pow(sizeY, 2));
+        let sizeX = this.PosX - obstacle.PosX
+        let sizeY = this.PosY - obstacle.PosY
+        let calcDistance = Math.sqrt(Math.pow(sizeX, 2) + Math.pow(sizeY, 2));
         if (calcDistance <= + (obstacle.size + this.size) / 2) {
             return true;
         }
@@ -74,44 +74,60 @@ class obstacle extends cercle {
         if (Math.round(this.PosY) <= 1 || Math.round(this.PosY) >= 480 - 1) {
             this.DirectionY = -this.DirectionY
         }
-        if (testCollision(joueur)) {
-            console.log("tu a perdu")
+        if (this.testCollision(joueur)) {
+            fill(0);
+            text("tu as perdu", 160, 240)
+            gameover = true;
         }
 
     }
 }
-let joueur = new cercle(0, 0, 50, 'white');
+let joueur = new cercle(320, 240, 10, 'white');
+let gameover = false;
+let startime;
 class obstacles {
-    list = []
+    static list = []
     constructor(nb) {
         for (let i = 0; i < nb; i++) {
-            this.list.push(new obstacle(Math.random() * 640, Math.random() * 480, 10, 'red'));
+            obstacles.list.push(new obstacle(Math.random() * 640, Math.random() * 480, 10, 'red'));
         }
+    }
+    reset() {
+        obstacles.list = [];
     }
     obstacle(id) {
-        return this.list[id];
-    }
-    newcreate(nb, size, couleur) {
-        this.list = [];
-        for (var i = 0; i < nb; i++) {
-            this.list.push(new obstacle(Math.random() * 640, Math.random() * 480, size, couleur));
-        }
+        return obstacles.list[id];
     }
     position(joueur) {
-        this.list.forEach(obstacle => {
+        obstacles.list.forEach(obstacle => {
             obstacle.deplacement(joueur);
             obstacle.position();
         });
     }
 };
-let tout_obstacles = new obstacles(5);
+let tout_obstacles = new obstacles(100);
+function millisToTimes(millis) {
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+}
 function setup() {
+    startime = millis();
     createCanvas(640, 480);
+    textSize(32);
 
 }
 function draw() {
-    background(220);
-    tout_obstacles.position(joueur)
-    joueur.deplacement(5);
-    joueur.position();
+    if (!gameover) {
+        background(220);
+        joueur.deplacement(5);
+        joueur.position();
+        tout_obstacles.position(joueur);
+        fill(0)
+        text("timer : " + millisToTimes(millis() - startime), 10, 40);
+    }
 }
+
+document.getElementById("restart").onclick = () => {
+    startime = millis();
+};
