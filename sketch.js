@@ -1,30 +1,33 @@
-class individu {
-    postion = {
-        x: 0,
-        y: 0
-    }
-    constructor() {
-
+class cercle {
+    x = 0
+    y = 0
+    size = 10;
+    couleur = 'white'
+    constructor(x, y, size, couleur) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.couleur = couleur;
     }
     get PosX() {
-        return this.postion.x
+        return this.x
     }
     get PosY() {
-        return this.postion.y
+        return this.y
     }
     set PosX(x) {
         if (0 <= x && x <= 640) {
-            this.postion.x = x;
+            this.x = x;
         }
     }
     set PosY(y) {
         if (0 <= y && y <= 480) {
-            this.postion.y = y;
+            this.y = y;
         }
     }
-    setPersonnage() {
-        fill(255);
-        ellipse(this.PosX, this.PosY, 10, 10);
+    position() {
+        fill(this.couleur);
+        ellipse(this.PosX, this.PosY, this.size, this.size);
     }
     deplacement(val) {
         if (keyIsDown(LEFT_ARROW)) {
@@ -41,13 +44,74 @@ class individu {
         }
     }
 }
+class obstacle extends cercle {
+    DirectionX = 0
+    DirectionY = 0
+    constructor(x, y, size, couleur) {
+        super(x, y, size, couleur);
+        let direction = Math.random() * 2 * Math.PI;
+        this.DirectionX = Math.cos(direction);
+        this.DirectionY = Math.sin(direction);
+    }
+    set direction(rad) {
+        this.direction = rad;
+    }
+    testCollision(obstacle) {
+        sizeX = this.DirectionX - obstacle.PosX
+        sizeY = this.DirectionY - obstacle.PosY
+        calcDistance = Math.sqrt(Math.pow(sizeX, 2) + Math.pow(sizeY, 2));
+        if (calcDistance <= + (obstacle.size + this.size) / 2) {
+            return true;
+        }
+        return false;
+    }
+    deplacement(joueur) {
+        this.PosX += this.DirectionX;
+        this.PosY += this.DirectionY;
+        if (Math.round(this.PosX) <= 1 || Math.round(this.PosX) >= 640 - 1) {
+            this.DirectionX = - this.DirectionX;
+        }
+        if (Math.round(this.PosY) <= 1 || Math.round(this.PosY) >= 480 - 1) {
+            this.DirectionY = -this.DirectionY
+        }
+        if (testCollision(joueur)) {
+            console.log("tu a perdu")
+        }
 
-let personnage = new individu();
+    }
+}
+let joueur = new cercle(0, 0, 50, 'white');
+class obstacles {
+    list = []
+    constructor(nb) {
+        for (let i = 0; i < nb; i++) {
+            this.list.push(new obstacle(Math.random() * 640, Math.random() * 480, 10, 'red'));
+        }
+    }
+    obstacle(id) {
+        return this.list[id];
+    }
+    newcreate(nb, size, couleur) {
+        this.list = [];
+        for (var i = 0; i < nb; i++) {
+            this.list.push(new obstacle(Math.random() * 640, Math.random() * 480, size, couleur));
+        }
+    }
+    position(joueur) {
+        this.list.forEach(obstacle => {
+            obstacle.deplacement(joueur);
+            obstacle.position();
+        });
+    }
+};
+let tout_obstacles = new obstacles(5);
 function setup() {
     createCanvas(640, 480);
+
 }
 function draw() {
     background(220);
-    personnage.deplacement(5);
-    personnage.setPersonnage();
+    tout_obstacles.position(joueur)
+    joueur.deplacement(5);
+    joueur.position();
 }
