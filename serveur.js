@@ -1,13 +1,15 @@
 let http = require('http');
 let express = require("express");
-let fs = require('fs');
 let app = express();
-
-const port = 80
-const host = 'localhost'
-
 const serveur = http.createServer(app);
 const io = require("socket.io")(serveur);
+
+let fs = require('fs');
+var crypto = require('crypto');
+const port = 80;
+const host = 'localhost'
+let listjoueur = {};
+
 app.get('/index.html', (request, reponce) => {
     fs.readFile('index.html', (err, stdout) => {
         reponce.end(stdout.toString());
@@ -30,7 +32,10 @@ app.get('/sketch.js', (request, reponce) => {
 });
 
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log("le user " + id + " est connecter");
+    socket.on("disconnect", () => {
+        console.log("le user " + id + " vient de deconnecter");
+    });
 });
 
 serveur.listen(port, host, () => {

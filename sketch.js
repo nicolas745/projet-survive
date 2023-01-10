@@ -20,7 +20,7 @@ class cercle {
     }
     //nombre
     set PosX(x) {
-        if (this.size / 2 <= x && x <= 640 - this.size / 2) {
+        if (this.size / 2 <= x % 640 && x % 640 <= 640 - this.size / 2) {
             this.x = x;
         } else {
             this.couleur = "red"
@@ -85,11 +85,16 @@ class obstacle extends cercle {
         }
         return false;
     }
+    // Y et X sont des nombre
+    editDirection(x, y) {
+        this.DirectionX = x;
+        this.DirectionY = y;
+    }
     //class joueur class joueur
     deplacement(joueur) {
         this.PosX += this.DirectionX;
         this.PosY += this.DirectionY;
-        if (Math.round(this.PosX) <= 1 + this.size / 2 || Math.round(this.PosX) >= 640 - 1 - this.size / 2) {
+        if (Math.round(this.PosX) % 640 <= 1 + this.size / 2 || Math.round(this.PosX) % 640 >= 640 - 1 - this.size / 2) {
             this.DirectionX = - this.DirectionX;
         }
         if (Math.round(this.PosY) <= 1 + this.size / 2 || Math.round(this.PosY) >= 480 - 1 - this.size / 2) {
@@ -108,7 +113,7 @@ class obstacles {
     //nb c'est nombre
     constructor(nb) {
         for (let i = 0; i < nb; i++) {
-            obstacles.list.push(new obstacle(Math.random() * 630, Math.random() * 470, 10, 'red'));
+            obstacles.list.push(new obstacle(Math.random() * 630 + 5, Math.random() * 470 + 5, 10, 'red'));
         }
     }
     reset() {
@@ -126,11 +131,24 @@ class obstacles {
         });
     }
 };
+class autreJoueur extends obstacles {
+    id = ""
+    constructor() {
+        super(0);
+    }
+    addobstacles(x, y, directionX, directionY) {
+        let newobstacle = new obstacle(x + 640, y, 10, 'red');
+        newobstacle.editDirection(directionX, directionY);
+        obstacles.list.push(newobstacle);
+    }
+}
 
 // --------------------------------
 //init 
+let existadversaire = false;
 let joueur = new cercle(320, 240, 50, 'white');
-let gameover = false;
+let adversaire = new cercle(640 + 320, 240, 50, 'white');
+let gameover = true;
 let enemieStart = 1;
 let tempsAjoutNewObstacle = 0; //ne pas modifier
 let tout_obstacles = new obstacles(enemieStart);
@@ -151,18 +169,38 @@ function millisToTimes(millis) {
 }
 function setup() {
     startime = millis();
-    createCanvas(640, 480);
+    createCanvas(640 * 2, 480);
     textSize(32);
+    background(220);
 
 }
 function draw() {
     if (!gameover) {
+        stroke(0, 0, 0)
         background(220);
+        line(640, 0, 640, 480);
         joueur.deplacement(5);
         joueur.position();
         tout_obstacles.position(joueur);
         fill(0)
         text("timer : " + millisToTimes(millis() - startime), 10, 40);
         addobstacles();
+        adversaire.position();
     }
 }
+
+// function pour jouer en ligne
+socket.on("AdversaireConnecter", () => {
+    existadversaire = true;
+});
+socket.on("AdversaireDeconecter", () => {
+    existadversaire = false;
+});
+socket.on("AddObstacleAdversaire", (Dataobstacle) => {
+    let autre = new autreJoueur();
+    autre.addobstacles(Dataobstacle.x, Dataobstacle.y, Dataobstacle.directionX, Dataobstacle.directionY);
+});
+socket.on("PositionAdversaire", (DataAdversaire) => {
+    adversaire.PosX = DataAdversaire.posX;
+    adversaire.PosY = DataAdversaire.posY;
+});
