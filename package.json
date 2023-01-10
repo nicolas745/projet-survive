@@ -1,0 +1,23 @@
+{
+  "name": "projet-survive",
+  "version": "1.0.0",
+  "main": "bouton.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolas745/projet-survive.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicolas745/projet-survive/issues"
+  },
+  "homepage": "https://github.com/nicolas745/projet-survive#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.5.4"
+  }
+}
