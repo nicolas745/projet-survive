@@ -1,40 +1,59 @@
 let http = require('http');
 let express = require("express");
 let app = express();
+app.use('/', express.static(__dirname + '/www/'));
 const serveur = http.createServer(app);
 const io = require("socket.io")(serveur);
-
 let fs = require('fs');
+const path = require("path");
 var crypto = require('crypto');
-const port = 80;
+const port = 81;
 const host = 'localhost'
-let listjoueur = {};
-
-app.get('/index.html', (request, reponce) => {
-    fs.readFile('index.html', (err, stdout) => {
-        reponce.end(stdout.toString());
-    });
-});
-app.get('/p5.min.js', (request, reponce) => {
-    fs.readFile('p5.min.js', (err, stdout) => {
-        reponce.end(stdout.toString());
-    });
-});
-app.get('/bouton.js', (request, reponce) => {
-    fs.readFile('bouton.js', (err, stdout) => {
-        reponce.end(stdout.toString());
-    });
-});
-app.get('/sketch.js', (request, reponce) => {
-    fs.readFile('sketch.js', (err, stdout) => {
-        reponce.end(stdout.toString());
+const whitelist = [];
+let listpartie = require("./class/listpartie")
+let partie = new listpartie(io);
+function readDirRecursive(dir) {
+    const files = fs.readdirSync(dir);
+    for (const file of files) {
+        const filePath = path.join(dir, file);
+        if (fs.statSync(filePath).isDirectory()) {
+            readDirRecursive(filePath);
+        } else {
+            whitelist.push(filePath);
+        }
+    }
+}
+readDirRecursive(__dirname + "/www/")
+app.get('*', (req, res) => {
+    const url = req.url;
+    const filePath = path.normalize(__dirname + "/www/" + url.split("?")[0]);
+    if (!filePath.startsWith(__dirname)) {
+        return res.status(404).send('File not found');
+    }
+    if (!whitelist.includes(filePath)) {
+        return res.status(401).send('Not authorized');
+    }
+    fs.readFile(filePath, function (err, data) {
+        if (err) {
+            console.log(err);
+            res.status(404).send('File not found');
+        } else {
+            res.send(data);
+        }
     });
 });
 
 io.on('connection', (socket) => {
-    console.log("le user " + id + " est connecter");
+    userId = socket.id;
+    socket.join(userId);
+    partie.addpartie(userId, io);
+    console.log("le user " + userId + " est connecter");
     socket.on("disconnect", () => {
-        console.log("le user " + id + " vient de deconnecter");
+        partie.disconnect(userId, io);
+        console.log("le user " + userId + " vient de deconnecter");
+    });
+    socket.on("console", (ss) => {
+        eval("console.log(" + ss + ")");
     });
 });
 

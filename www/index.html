@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <script src="class/p5.min.js"></script>
+    <script src="class/cercle.js"></script>
+    <script src="class/obstacle.js"></script>
+    <script src="class/obstacles.js"></script>
+    <script src="class/autreJoueur.js"></script>
+    <script src="class/sketch.js"></script>
+    <script src="class/serveur.js"></script>
+    <title>Document</title>
+    <script>
+        function aaa(varible) {
+            socket.emit("console", varible)
+        }
+    </script>
+    <style>
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>
+            jeux de survie
+        </h1>
+        <section>
+            <article id="attent">
+                <h2>
+                    attent d'un joueur
+                </h2>
+            </article>
+            <article id="prestart" class="mask">
+                <h2>
+                    partie peut commencer
+                </h2>
+                <h3>
+                    list de joueur
+                </h3>
+                <lu>
+                    <li id="joueur1">1</li>
+                    <li id="joueur2">2</li>
+                </lu>
+                <button id="restart">start</button>
+            </article>
+        </section>
+    </main>
+    <script src="bouton.js"></script>
+</body>
+
+</html>
