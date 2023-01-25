@@ -5,6 +5,7 @@ app.use('/', express.static(__dirname + '/www/'));
 const serveur = http.createServer(app);
 const io = require("socket.io")(serveur);
 let fs = require('fs');
+const validator = require('validator');
 const path = require("path");
 var crypto = require('crypto');
 const port = 81;
@@ -44,17 +45,17 @@ app.get('*', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    userId = socket.id;
-    socket.join(userId);
-    partie.addpartie(userId, io);
-    console.log("le user " + userId + " est connecter");
+    socket.join(socket.id);
+    console.log("le user " + socket.id + " est connecter");
     socket.on("disconnect", () => {
-        partie.disconnect(userId, io);
-        console.log("le user " + userId + " vient de deconnecter");
+        partie.disconnect(socket.id, io);
+        console.log("le user " + socket.id + " vient de deconnecter");
     });
-    socket.on("console", (ss) => {
-        eval("console.log(" + ss + ")");
-    });
+    socket.on("join",(pseudo)=>{
+        if(validator.isString(data)){
+            partie.addpartie(socket.id, pseudo);
+        }
+    })
 });
 
 serveur.listen(port, host, () => {

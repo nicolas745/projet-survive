@@ -8,10 +8,10 @@ class partie {
         this.io = io;
     }
     getAdversaire(joueur) {
-        if (joueur == this.joueur1) {
-            return this.joueur2;
+        if (joueur === this.joueur1.id) {
+            return this.joueur2.id;
         } else {
-            return this.joueur1;
+            return this.joueur1.id;
         }
     }
     disconnect(joueur) {

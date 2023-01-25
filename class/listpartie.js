@@ -1,5 +1,6 @@
 function removeValueFromArray(value, array) {
     return array.filter(function (item) {
+        console.log("dd")
         return item != value;
     });
 }
@@ -11,15 +12,19 @@ class listpartie {
     constructor(io) {
         this.io = io
     }
-    addpartie(userId) {
+    addpartie(userId,pseudo) {
+        var data = {
+            id:userId,
+            pseudo:pseudo
+        }
         if (this.attent.length >= 1) {
-            let create = new partie(userId, this.attent[0], this.io);
-            this.listjoueur[this.attent[0]] = create;
+            let create = new partie(data, this.attent[0], this.io);
+            this.listjoueur[this.attent[0].id] = create;
             this.listjoueur[userId] = create;
             this.attent.shift();
             create.prestart();
         } else {
-            this.attent.push(userId);
+            this.attent.push(data);
         }
     }
     disconnect(userId) {
@@ -33,6 +38,7 @@ class listpartie {
             delete this.listjoueur[adv];
             this.attent.push(adv);
         }
+        console.log(this.attent);
     }
     startpartie() {
 
