@@ -1,6 +1,5 @@
 function removeValueFromArray(value, array) {
     return array.filter(function (item) {
-        console.log("dd")
         return item != value;
     });
 }

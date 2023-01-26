@@ -2,19 +2,16 @@
 import obstacles from "./obstacles.js";
 import cercle from "./cercle.js"
 import game from "./game.js";
-export default class solo extends game{
+export default class multi extends game{
     constructor(){
         super();
         this.stgame = true;
     }
-    get mod(){
-        return "solo";
-    }
     restart(){
-        solo.startGame = true;
+        multi.startGame = true;
     }
     remove(){
-        solo.remove = true;
+        multi.remove = true;
     }
     game(sketch){
         function millisToTimes(millis) {
@@ -36,13 +33,13 @@ export default class solo extends game{
         let startime;
         sketch.setup = function() { 
             startime = sketch.millis();
-            sketch.createCanvas(640, 480);
+            sketch.createCanvas(640*2, 480);
             sketch.textSize(32);
             sketch.background(220);
         }
         sketch.draw = function() {
-            if(solo.startGame == true){
-                solo.startGame = false;
+            if(multi.startGame == true){
+                multi.startGame = false;
                 tout_obstacles.reset();
                 startime = sketch.millis();
                 new obstacles(enemieStart,sketch);
@@ -61,8 +58,8 @@ export default class solo extends game{
      
                 addobstacles();
             }
-            if(solo.remove){
-                solo.remove = false;
+            if(multi.remove){
+                multi.remove = false;
                 sketch.remove();
             }
         }
