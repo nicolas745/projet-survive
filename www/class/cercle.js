@@ -1,16 +1,18 @@
-class cercle {
+export default class cercle {
     x = 0
     y = 0
     size = 10;
     couleur = 'white'
+    sketch;
     //size est un nombre
     //couleur int ou string
     //x et y un nombre
-    constructor(x, y, size, couleur) {
+    constructor(x, y, size, couleur,sketch) {
         this.x = x;
         this.y = y;
         this.size = size;
         this.couleur = couleur;
+        this.sketch = sketch;
     }
     get PosX() {
         return this.x
@@ -37,31 +39,31 @@ class cercle {
         }
     }
     position() {
-        fill(this.couleur);
-        ellipse(this.PosX, this.PosY, this.size, this.size);
+        this.sketch.fill(this.couleur);
+        this.sketch.ellipse(this.PosX, this.PosY, this.size, this.size);
     }
     bordure() {
-        stroke(0, 0, 0);
-        strokeWeight(5)
-        line(0, 0, 0, 480);
-        line(0, 0, 640, 0);
-        line(640, 0, 640, 480);
-        line(0, 480, 640, 480);
-        strokeWeight(1)
+        this.sketch.stroke(0, 0, 0);
+        this.sketch.strokeWeight(5)
+        this.sketch.line(0, 0, 0, 480);
+        this.sketch.line(0, 0, 640, 0);
+        this.sketch.line(640, 0, 640, 480);
+        this.sketch.line(0, 480, 640, 480);
+        this.sketch.strokeWeight(1)
     }
     //val c'est class cercle ou obstacle
     deplacement(val) {
         this.couleur = "white"
-        if (keyIsDown(LEFT_ARROW)) {
+        if (this.sketch.keyIsDown(this.sketch.LEFT_ARROW)) {
             this.PosX = this.PosX - val
         }
-        if (keyIsDown(RIGHT_ARROW)) {
+        if (this.sketch.keyIsDown(this.sketch.RIGHT_ARROW)) {
             this.PosX = this.PosX + val
         }
-        if (keyIsDown(UP_ARROW)) {
+        if (this.sketch.keyIsDown(this.sketch.UP_ARROW)) {
             this.PosY = this.PosY - val
         }
-        if (keyIsDown(DOWN_ARROW)) {
+        if (this.sketch.keyIsDown(this.sketch.DOWN_ARROW)) {
             this.PosY = this.PosY + val
         }
     }

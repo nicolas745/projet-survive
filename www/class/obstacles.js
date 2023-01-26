@@ -1,9 +1,11 @@
-class obstacles {
+import obstacle from "./obstacle.js"
+export default class obstacles {
     static list = []
+    sketch;
     //nb c'est nombre
-    constructor(nb) {
+    constructor(nb,sketch) {
         for (let i = 0; i < nb; i++) {
-            obstacles.list.push(new obstacle(Math.random() * 630 + 5, Math.random() * 470 + 5, 10, 'red'));
+            obstacles.list.push(new obstacle(Math.random() * 630 + 5, Math.random() * 470 + 5, 10, 'red',sketch));
         }
     }
     reset() {

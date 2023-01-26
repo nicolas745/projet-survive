@@ -18,8 +18,8 @@ class partie {
         this.io.to(this.getAdversaire(joueur)).emit("AdversaireDeconecter", joueur)
     }
     prestart() {
-        this.io.to(this.joueur1).emit("AdversaireConnecter", this.joueur2);
-        this.io.to(this.joueur2).emit("AdversaireConnecter", this.joueur1);
+        this.io.to(this.joueur1.id).emit("AdversaireConnecter", this.joueur2.id);
+        this.io.to(this.joueur2.id).emit("AdversaireConnecter", this.joueur1.id);
     }
 }
 

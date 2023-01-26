@@ -38,7 +38,6 @@ class listpartie {
             delete this.listjoueur[adv];
             this.attent.push(adv);
         }
-        console.log(this.attent);
     }
     startpartie() {
 

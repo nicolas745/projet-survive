@@ -30,8 +30,21 @@
             <article>
               <h2>Lobby</h2>
               <p>Entrez votre pseudo pour rejoindre une partie :</p>
+              <select>
+                <option>
+                  solo
+                </option>
+                <option>
+                  multijoueur offline
+                </option>
+                <option>
+                  multijoueur online
+                </option>
+              </select>
               <input type="text" id="pseudo" placeholder="Entrez votre pseudo">
+              <input type="text" id="pseudo1" placeholder="Entrez votre pseudo1">
               <button onclick="joinGame()">Rejoindre</button>
+              <input id="restart" type="submit">
             </article>
             <article class="mask">
               <h2>Salle d'attente</h2>
@@ -44,12 +57,7 @@
             </article>
           </section>
     </main>
-    <script src="class/cercle.js"></script>
-    <script src="class/obstacle.js"></script>
-    <script src="class/obstacles.js"></script>
-    <script src="class/autreJoueur.js"></script>
-    <script src="class/sketch.js"></script>
-    <script src="class/serveur.js"></script>
+    <script src="class/solo.js" type="module"></script>
     <script src="bouton.js"></script>
 </body>
 
