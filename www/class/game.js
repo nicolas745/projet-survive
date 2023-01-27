@@ -42,7 +42,7 @@ export class game {
             return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
         }
         function addobstacles() {
-            if (tempsAjoutNewObstacle == Math.pow(10, 2)) {
+            if (tempsAjoutNewObstacle > Math.pow(10, 2)) {
                 tempsAjoutNewObstacle = 0;
                 return new obstacles(1, sketch);
             }
@@ -59,6 +59,7 @@ export class game {
         sketch.draw = function () {
             if (game.startGame == true) {
                 game.startGame = false;
+                sketch.setup();
                 tout_obstacles.reset();
                 startime = sketch.millis();
                 new obstacles(enemieStart, sketch);

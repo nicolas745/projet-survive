@@ -14,9 +14,11 @@ export class autreJoueur extends obstacles {
         let newobstacle = new obstacles(0, this.sketch);
         newobstacle.addDirection(x, y, direction);
     }
-    deplacement = function () {
+    deplacement = function (deplacement) {
         this.adversaire.position();
-        this.adversaire.deplacement(5);
+        if(deplacement){
+            this.adversaire.deplacement(5);
+        }
     }
     get adversaire() {
         return this.adversaire

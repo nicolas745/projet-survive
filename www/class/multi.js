@@ -4,6 +4,7 @@ import { obstacles } from "./obstacles.js";
 export class multi extends game {
     adversaire;
     obstacles;
+    static tempsAjoutNewObstacle =1000;
     constructor() {
         super();
         game.setup = this.setup;
@@ -12,6 +13,7 @@ export class multi extends game {
     setup = function (startime, sketch) {
         this.adversaire = new autreJoueur(sketch);
         this.obstacles = new obstacles(0, sketch);
+        multi.tempsAjoutNewObstacle = 1000;
         startime = sketch.millis();
         sketch.createCanvas(640 * 2, 480);
         sketch.textSize(32);
