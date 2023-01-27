@@ -1,4 +1,4 @@
-export default class cercle {
+export class cercle {
     x = 0
     y = 0
     size = 10;

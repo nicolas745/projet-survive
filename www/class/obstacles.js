@@ -1,11 +1,12 @@
-import obstacle from "./obstacle.js"
-export default class obstacles {
+import {obstacle} from "./obstacle.js"
+export class obstacles {
     static list = []
-    sketch;
+    static sketch;
     //nb c'est nombre
     constructor(nb,sketch) {
         for (let i = 0; i < nb; i++) {
-            obstacles.list.push(new obstacle(Math.random() * 630 + 5, Math.random() * 470 + 5, 10, 'red',sketch));
+            obstacles.list.push(new obstacle(Math.random() * 630 + 5, Math.random() * 470 + 5,Math.random() * 2 * Math.PI, 10, 'red',sketch));
+            obstacle.sketch = sketch;
         }
     }
     reset() {
@@ -21,5 +22,8 @@ export default class obstacles {
             obstacle.deplacement(joueur);
             obstacle.position();
         });
+    }
+    addDirection(x,y,direction){
+        obstacle.list.push(new obstacle(x,y,direction,10,'red',obstacles.sketch));
     }
 };

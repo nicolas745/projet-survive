@@ -1,12 +1,11 @@
-import cercle from "./cercle.js";
-export default class obstacle extends cercle {
+import {cercle} from "./cercle.js";
+export class obstacle extends cercle {
     DirectionX = 0
     DirectionY = 0
     sketch;
-    constructor(x, y, size, couleur,sketch) {
+    constructor(x, y,direction, size, couleur,sketch,) {
         super(x, y, size, couleur,sketch);
         this.sketch =sketch;
-        let direction = Math.random() * 2 * Math.PI;
         this.DirectionX = Math.cos(direction);
         this.DirectionY = Math.sin(direction);
     }

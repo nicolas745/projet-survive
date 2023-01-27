@@ -1,6 +1,7 @@
-import multi from "./multi.js";
-export default class offline extends multi{
-    get mod(){
-        return "offline";
+import {multi} from "./multi.js";
+export class offline extends multi{
+    constructor(){
+        super();
+        this.mod = "offline"
     }
 }

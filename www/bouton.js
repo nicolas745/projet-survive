@@ -1,6 +1,6 @@
-import solo from "./class/solo.js"
-import offline from "./class/offline.js"
-import online from "./class/online.js"
+import {solo} from "./class/solo.js"
+import {offline} from "./class/offline.js"
+import {online} from "./class/online.js"
 document.getElementById("select").addEventListener("change",(event)=>{
     if(document.getElementById("select").value!=="offline"){
         document.getElementById("pseudo1").classList.add("mask")
