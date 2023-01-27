@@ -7,13 +7,18 @@ export class autreJoueur extends obstacles {
     constructor(sketch) {
         super(0);
         this.sketch = sketch;
-        this.adversaire = new cercle(640+320, 240, 50, 'white',sketch)
+        this.adversaire = new cercle(640 + 320, 240, 50, 'white', sketch);
+        this.adversaire.type = "p2";
     }
     addobstacles(x, y, direction) {
-        let newobstacle = new obstacles(0,this.sketch);
-        newobstacle.addDirection(x, y,direction);
+        let newobstacle = new obstacles(0, this.sketch);
+        newobstacle.addDirection(x, y, direction);
     }
-    position =function(){
+    deplacement = function () {
         this.adversaire.position();
+        this.adversaire.deplacement(5);
+    }
+    get adversaire() {
+        return this.adversaire
     }
 }

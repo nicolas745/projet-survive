@@ -1,13 +1,22 @@
+import { key } from "./key.js";
 export class cercle {
     x = 0
     y = 0
     size = 10;
     couleur = 'white'
     sketch;
+    type = "p1"; //valeur p1 ou p2 qui corespont type de joueur
+    touche = {
+        leftKey: 37,
+        upKey: 38,
+        rightKey: 39,
+        downKey: 40
+    }
+    Ckey = new key();
     //size est un nombre
     //couleur int ou string
     //x et y un nombre
-    constructor(x, y, size, couleur,sketch) {
+    constructor(x, y, size, couleur, sketch) {
         this.x = x;
         this.y = y;
         this.size = size;
@@ -19,6 +28,9 @@ export class cercle {
     }
     get PosY() {
         return this.y
+    }
+    set type(playeur) {
+        this.type = playeur;
     }
     //nombre
     set PosX(x) {
@@ -54,17 +66,20 @@ export class cercle {
     //val c'est class cercle ou obstacle
     deplacement(val) {
         this.couleur = "white"
-        if (this.sketch.keyIsDown(this.sketch.LEFT_ARROW)) {
+        if (this.keypress("Left")) {
             this.PosX = this.PosX - val
         }
-        if (this.sketch.keyIsDown(this.sketch.RIGHT_ARROW)) {
+        if (this.keypress("Right")) {
             this.PosX = this.PosX + val
         }
-        if (this.sketch.keyIsDown(this.sketch.UP_ARROW)) {
+        if (this.keypress("Up")) {
             this.PosY = this.PosY - val
         }
-        if (this.sketch.keyIsDown(this.sketch.DOWN_ARROW)) {
+        if (this.keypress("Down")) {
             this.PosY = this.PosY + val
         }
+    }
+    keypress(keyname) {
+        return this.sketch.keyIsDown(this.Ckey.getkey(keyname, this.type));
     }
 }

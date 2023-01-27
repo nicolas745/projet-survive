@@ -1,5 +1,6 @@
 function removeValueFromArray(value, array) {
     return array.filter(function (item) {
+
         return item != value;
     });
 }
@@ -11,10 +12,10 @@ class listpartie {
     constructor(io) {
         this.io = io
     }
-    addpartie(userId,pseudo) {
+    addpartie(userId, pseudo) {
         var data = {
-            id:userId,
-            pseudo:pseudo
+            id: userId,
+            pseudo: pseudo
         }
         if (this.attent.length >= 1) {
             let create = new partie(data, this.attent[0], this.io);
@@ -37,9 +38,6 @@ class listpartie {
             delete this.listjoueur[adv];
             this.attent.push(adv);
         }
-    }
-    startpartie() {
-
     }
 }
 module.exports = listpartie;
