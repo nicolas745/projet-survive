@@ -1,4 +1,5 @@
 import { cercle } from "./cercle.js";
+import { menu } from "./menu.js";
 export class obstacle extends cercle {
     DirectionX = 0
     DirectionY = 0
@@ -36,7 +37,8 @@ export class obstacle extends cercle {
         }
         if (this.testCollision(joueur)) {
             this.sketch.fill(0);
-            this.sketch.text("tu as perdu", 160, 240)
+            menu.actif = true;
+            menu.select= "gameover"
             this.sketch.gameover = true;
         }
 

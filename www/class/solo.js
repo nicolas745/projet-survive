@@ -14,10 +14,16 @@ export class solo extends game{
         sketch.createCanvas(640, 480);
         sketch.textSize(32);
         sketch.background(220);
-        menu.addbutton("Le jeux de survie","Joueur",1,()=>{
+        menu.addbutton("Le jeux de survie","play",1,1,1,()=>{
             menu.actif = false;
-            sketch.textAlign(sketch.LEFT)
         })
+        menu.addbutton("Le jeux de survie", "exit",2,1,1, () => {
+            game.remove = true
+          });
+          menu.addbutton("gameover","exit",0,1,2,function(){
+            game.remove = true;
+            menu.select = "Le jeux de survie"
+          })
     }
     addobstacles(sketch) {
         if (solo.tempsAjoutNewObstacle > Math.pow(10, 2)) {

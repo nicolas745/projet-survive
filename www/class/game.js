@@ -74,11 +74,12 @@ export class game {
     sketch.setup = function () {
       game.setup(startime, sketch);
       new menu(sketch);
-      menu.addbutton("Le jeux de survie", "config",0, () => {
+      menu.addbutton("Le jeux de survie", "config",0,1,1, () => {
       });
-      menu.addbutton("Le jeux de survie", "exit",2, () => {
-        game.remove = true
-      });
+      menu.addbutton("gameover","restart",1,2,2,function(){
+        game.startGame = true;
+        menu.actif = false;
+      })
     }
     sketch.draw = function () {
       if (game.remove) {
@@ -89,7 +90,6 @@ export class game {
         return;
       }
       if (game.startGame == true) {
-        console.log("aa");
         game.startGame = false;
         tout_obstacles.reset();
         startime = sketch.millis();
@@ -98,6 +98,7 @@ export class game {
         joueur.PosY = 240;
       }
       if (!sketch.gameover) {
+        sketch.textAlign(sketch.LEFT);
         sketch.stroke(0, 0, 0)
         sketch.background(220);
         sketch.line(640, 0, 640, 480);

@@ -3,11 +3,13 @@ export class menu {
     static menu = {};
     static select= "Le jeux de survie";
     static sketch;
-    static selecButon = 0;
+    static selecButonY = 0;
+    static selecButonX=0;
     static colorActif = "#00ff00"
     static colorpassif = "white"
-    static delay = 5;
+    static delay = 10;
     static times = 1000;
+    static timeEntre = 1000;
     static butonSize = {
         x: 300,
         y: 50
@@ -22,19 +24,20 @@ export class menu {
         return this.actif;
     }
     static affiche() {
+        this.sketch.background(220);
         this.sketch.textAlign(this.sketch.CENTER);
         this.sketch.fill(0);
         this.sketch.text(this.select, this.sketch.width / 2, 40);
         if (typeof this.menu[this.select] !== "undefined") {
             this.menu[this.select].forEach((element) => {
-                if (this.selecButon === element.pos) {
+                if (this.selecButonY === element.posY) {
                     this.sketch.fill(this.colorActif);
                 } else {
                     this.sketch.fill(255);
                 }
-                this.sketch.rect(this.sketch.width / 2 - this.butonSize.x / 2, this.posYmenu + element.pos * (this.butonSize.y + this.espacebuton), this.butonSize.x, this.butonSize.y);
+                this.sketch.rect(this.sketch.width / 2 - this.butonSize.x / 2, this.posYmenu + element.posY * (this.butonSize.y + this.espacebuton), this.butonSize.x, this.butonSize.y);
                 this.sketch.fill(0);
-                this.sketch.text(element.text, this.sketch.width / 2, this.posYmenu + 40 + element.pos * (this.butonSize.y + this.espacebuton))
+                this.sketch.text(element.text, this.sketch.width / 2, this.posYmenu + 40 + element.posY * (this.butonSize.y + this.espacebuton))
             });
         }
         this.action();
@@ -43,36 +46,48 @@ export class menu {
         if (this.delay > this.times) {
             this.times++;
         }
+        if (this.delay > this.timeEntre) {
+            this.timeEntre++;
+        }
         if (this.delay <= this.times && this.sketch.keyIsDown(38)) {
-            this.selecButon--;
+            this.selecButonY--;
             this.times = 0;
         }
         if (this.delay <= this.times && this.sketch.keyIsDown(40)) {
             this.times = 0;
-            this.selecButon++
+            this.selecButonY++
         }
-        if (this.sketch.keyIsDown(13) || this.sketch.keyIsDown(13)) {
+        if (this.delay <= this.times && this.sketch.keyIsDown(37)) {
+            this.selecButonX--;
+            this.times = 0;
+        }
+        if (this.delay <= this.times && this.sketch.keyIsDown(39)) {
+            this.times = 0;
+            this.selecButonX++
+        }
+        if ((this.sketch.keyIsDown(32) || this.sketch.keyIsDown(13)) && this.delay <= this.timeEntre) {
             menu.menu[this.select].forEach((element) => {
-                if (element.pos === this.selecButon) {
+                if (element.posY === this.selecButonY) {
+                    this.timeEntre = 0;
                     element.func();
                 }
             })
             this.times = 0;
         }
-        if (this.selecButon < 0) {
-            this.selecButon = menu.menu[this.select].length - 1;
+        if (this.selecButonY < 0) {
+            this.selecButonY = menu.menu[this.select].length - 1;
         }
-        if (this.selecButon >= menu.menu[this.select].length) {
-            this.selecButon = 0;
+        if (this.selecButonY >= menu.menu[this.select].length) {
+            this.selecButonY = 0;
         }
     }
-    static addbutton(menuname, text, pos, func) {
+    static addbutton(menuname, text, posY,posX,divX, func) {
         if (typeof menu.menu[menuname] === "undefined") {
             menu.menu[menuname] = [];
         }
         let res = -1;
         menu.menu[menuname].forEach((element,index) => {
-            if (element.pos === pos) {
+            if (element.posY === posY) {
                 res = index;
             }
         });
@@ -80,14 +95,14 @@ export class menu {
             menu.menu[menuname].push({
                 "text": text,
                 "func": func,
-                "pos": pos
+                "posY": posY
 
             })
         } else {
             menu.menu[menuname][res]={
                 "text": text,
                 "func": func,
-                "pos": pos
+                "posY": posY
             }
         }
     }

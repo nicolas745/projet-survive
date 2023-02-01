@@ -18,33 +18,38 @@ const gameModes = {
     "online": online
 };
 function startGame(mod) {
-
-    if (typeof games === "undefined" || games.mod !== mod) {
-        if (typeof games !== "undefined") {
-            if(games.mod==="online"){
-                games.disconnect();
+    if(document.getElementsByClassName("p5Canvas").length===0){
+        games = new gameModes[mod]();
+        games.start();   
+    }else{
+        if (typeof games === "undefined" || games.mod !== mod) {
+            if (typeof games !== "undefined") {
+                if(games.mod==="online"){
+                    online.socket.disconnect();
+                }
+                if(document.fullscreenElement){
+                    games.toggleFullScreen(document.getElementsByClassName("p5Canvas")[0],false);
+                }
+                games.remove();
             }
+            var intervalId = setInterval(function(){
+                if(document.getElementsByClassName("p5Canvas").length === 0){
+                    clearInterval(intervalId);
+                    games = new gameModes[mod]();
+                    games.start();
+                }
+            }, 100);
+        } else {
             if(document.fullscreenElement){
-                games.toggleFullScreen(document.getElementsByClassName("p5Canvas")[0],false);
+                games.toggleFullScreen(document.getElementsByClassName("p5Canvas")[0],true);
             }
-            games.remove();
+            menu.select ="Le jeux de survie"
+            menu.actif = true
+            game.remove = false;
+            games.restart();
         }
-        var intervalId = setInterval(function(){
-            if(document.getElementsByClassName("p5Canvas").length === 0){
-                clearInterval(intervalId);
-                games = new gameModes[mod]();
-                games.start();
-            }
-        }, 100);
-    } else {
-        if(document.fullscreenElement){
-            games.toggleFullScreen(document.getElementsByClassName("p5Canvas")[0],true);
-        }
-        menu.select ="Le jeux de survie"
-        menu.actif = true
-        game.remove = false;
-        games.restart();
     }
+    /**/
 }
 document.getElementById("start").addEventListener("click", () => {
     startGame(document.getElementById("select").value);

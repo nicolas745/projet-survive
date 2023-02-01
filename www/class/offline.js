@@ -1,4 +1,5 @@
 import { game } from "./game.js";
+import { menu } from "./menu.js";
 import { multi } from "./multi.js";
 import { obstacles } from "./obstacles.js";
 export class offline extends multi {
@@ -8,6 +9,16 @@ export class offline extends multi {
         this.mod = "offline"
         game.multijoueur = this.funconline;
         game.addobstacles = this.addobstacles;
+        menu.addbutton("Le jeux de survie", "jouer", 1, 1, 1, () => {
+            menu.actif = false;
+        })
+        menu.addbutton("Le jeux de survie", "exit", 2, 1, 1, () => {
+            game.remove = true
+        });
+        menu.addbutton("gameover", "exit", 0, 1, 2, function () {
+            game.remove = true;
+            menu.select = "Le jeux de survie"
+        })
     }
     funconline(adversaire, obstacles, sketch) {
         obstacles.position(adversaire.adversaire);

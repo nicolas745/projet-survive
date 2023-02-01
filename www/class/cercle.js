@@ -78,6 +78,12 @@ export class cercle {
         if (this.keypress("Down")) {
             this.PosY = this.PosY + val
         }
+        if(typeof cercle.socket !== "undefined"){
+            cercle.socket.emit("adversaire",{
+                "posX":this.posX,
+                "PosY":this.PosY
+            });
+        }
     }
     keypress(keyname) {
         return this.sketch.keyIsDown(this.Ckey.getkey(keyname, this.type));
