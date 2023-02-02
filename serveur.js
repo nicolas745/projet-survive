@@ -5,9 +5,7 @@ app.use('/', express.static(__dirname + '/www/'));
 const serveur = http.createServer(app);
 const io = require("socket.io")(serveur);
 let fs = require('fs');
-const validator = require('validator');
 const path = require("path");
-var crypto = require('crypto');
 const port = 81;
 const host = 'localhost'
 const whitelist = [];
@@ -49,15 +47,22 @@ io.on('connection', (socket) => {
     console.log("le user " + socket.id + " est connecter");
     socket.on("disconnect", () => {
         partie.disconnect(socket.id, io);
+        console.log(socket.id + "a quité la salle d'attent");
         console.log("le user " + socket.id + " vient de deconnecter");
     });
-    socket.on("join",(pseudo)=>{
-        if(validator.isString(data)){
-            partie.addpartie(socket.id, pseudo);
-        }
+    socket.on("join", (pseudo) => {
+        console.log(socket.id + "a rejoint la salle d'attent");
+        partie.addpartie(socket.id, pseudo);
+    })
+    socket.on("left join", (pseudo) => {
+        console.log(socket.id + "a quité la salle d'attent");
+        partie.disconnect(socket.id, io);
+    });
+    socket.on("adversaire", (DataAdversaire) => {
+        let idadv = partie.listjoueur[socket.id].getAdversaire();
+        io.to(idadv).emit("PositionAdversaire", DataAdversaire)
     })
 });
-
 serveur.listen(port, host, () => {
     console.log("serveur est ouver sur le port" + port);
 });

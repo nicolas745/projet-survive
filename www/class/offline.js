@@ -18,7 +18,7 @@ export class offline extends multi {
         menu.addbutton("gameover", "exit", 0, 1, 2, function () {
             game.remove = true;
             menu.select = "Le jeux de survie"
-        })
+        });
     }
     funconline(adversaire, obstacles, sketch) {
         obstacles.position(adversaire.adversaire);

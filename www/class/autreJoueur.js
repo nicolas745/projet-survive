@@ -4,6 +4,7 @@ import { obstacles } from "./obstacles.js";
 export class autreJoueur extends obstacles {
     sketch;
     adversaire;
+    static pseudo;
     constructor(sketch) {
         super(0);
         this.sketch = sketch;
@@ -16,7 +17,7 @@ export class autreJoueur extends obstacles {
     }
     deplacement = function (deplacement) {
         this.adversaire.position();
-        if(deplacement){
+        if (deplacement) {
             this.adversaire.deplacement(5);
         }
     }

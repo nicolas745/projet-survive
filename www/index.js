@@ -4,6 +4,7 @@ import { online } from "./class/online.js"
 import { key } from "./class/key.js"
 import { menu } from "./class/menu.js"
 import { game } from "./class/game.js"
+import { cercle } from "./class/cercle.js"
 document.getElementById("select").addEventListener("change", (event) => {
     if (document.getElementById("select").value !== "offline") {
         document.getElementById("pseudo1").classList.add("mask")
@@ -18,38 +19,45 @@ const gameModes = {
     "online": online
 };
 function startGame(mod) {
-    if(document.getElementsByClassName("p5Canvas").length===0){
+    menu.select = "Le jeux de survie"
+    if (document.getElementsByClassName("p5Canvas").length === 0) {
         games = new gameModes[mod]();
-        games.start();   
-    }else{
+        if (games.mod === "online") {
+            if (online.isconnect) {
+                online.socket.disconnect();
+            }
+        }
+        if (document.fullscreenElement) {
+            games.toggleFullScreen(document.getElementsByClassName("p5Canvas")[0], false);
+        }
+        games.start();
+    } else {
         if (typeof games === "undefined" || games.mod !== mod) {
             if (typeof games !== "undefined") {
-                if(games.mod==="online"){
-                    online.socket.disconnect();
-                }
-                if(document.fullscreenElement){
-                    games.toggleFullScreen(document.getElementsByClassName("p5Canvas")[0],false);
+                if (document.fullscreenElement) {
+                    games.toggleFullScreen(document.getElementsByClassName("p5Canvas")[0], false);
                 }
                 games.remove();
             }
-            var intervalId = setInterval(function(){
-                if(document.getElementsByClassName("p5Canvas").length === 0){
+            var intervalId = setInterval(function () {
+                if (document.getElementsByClassName("p5Canvas").length === 0) {
                     clearInterval(intervalId);
                     games = new gameModes[mod]();
                     games.start();
                 }
             }, 100);
         } else {
-            if(document.fullscreenElement){
-                games.toggleFullScreen(document.getElementsByClassName("p5Canvas")[0],true);
+            if (document.fullscreenElement) {
+                games.toggleFullScreen(document.getElementsByClassName("p5Canvas")[0], true);
             }
-            menu.select ="Le jeux de survie"
             menu.actif = true
             game.remove = false;
+            if (online.isjoin) {
+                cercle.socket.emit("left join", undefined);
+            }
             games.restart();
         }
     }
-    /**/
 }
 document.getElementById("start").addEventListener("click", () => {
     startGame(document.getElementById("select").value);

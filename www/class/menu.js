@@ -1,15 +1,18 @@
+import { cercle } from "./cercle.js";
+
 export class menu {
     static actif;
     static menu = {};
-    static select= "Le jeux de survie";
+    static select = "Le jeux de survie";
     static sketch;
     static selecButonY = 0;
-    static selecButonX=0;
+    static selecButonX = 0;
     static colorActif = "#00ff00"
     static colorpassif = "white"
     static delay = 10;
     static times = 1000;
     static timeEntre = 1000;
+    static gamefunc;
     static butonSize = {
         x: 300,
         y: 50
@@ -25,6 +28,9 @@ export class menu {
     }
     static affiche() {
         this.sketch.background(220);
+        if (typeof this.gamefunc === "function") {
+            this.gamefunc(this.sketch);
+        }
         this.sketch.textAlign(this.sketch.CENTER);
         this.sketch.fill(0);
         this.sketch.text(this.select, this.sketch.width / 2, 40);
@@ -66,7 +72,7 @@ export class menu {
             this.selecButonX++
         }
         if ((this.sketch.keyIsDown(32) || this.sketch.keyIsDown(13)) && this.delay <= this.timeEntre) {
-            menu.menu[this.select].forEach((element) => {
+            this.menu[this.select].forEach((element) => {
                 if (element.posY === this.selecButonY) {
                     this.timeEntre = 0;
                     element.func();
@@ -75,33 +81,34 @@ export class menu {
             this.times = 0;
         }
         if (this.selecButonY < 0) {
-            this.selecButonY = menu.menu[this.select].length - 1;
+            this.selecButonY = this.menu[this.select].length - 1;
         }
-        if (this.selecButonY >= menu.menu[this.select].length) {
+        if (this.selecButonY >= this.menu[this.select].length) {
             this.selecButonY = 0;
         }
     }
-    static addbutton(menuname, text, posY,posX,divX, func) {
-        if (typeof menu.menu[menuname] === "undefined") {
-            menu.menu[menuname] = [];
+    static addbutton(menuname, text, posY, posX, divX, funcselect, gamefunc) {
+        this.gamefunc = gamefunc;
+        if (typeof this.menu[menuname] === "undefined") {
+            this.menu[menuname] = [];
         }
         let res = -1;
-        menu.menu[menuname].forEach((element,index) => {
+        this.menu[menuname].forEach((element, index) => {
             if (element.posY === posY) {
                 res = index;
             }
         });
         if (res === -1) {
-            menu.menu[menuname].push({
+            this.menu[menuname].push({
                 "text": text,
-                "func": func,
+                "func": funcselect,
                 "posY": posY
 
             })
         } else {
-            menu.menu[menuname][res]={
+            this.menu[menuname][res] = {
                 "text": text,
-                "func": func,
+                "func": funcselect,
                 "posY": posY
             }
         }

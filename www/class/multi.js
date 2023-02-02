@@ -4,7 +4,7 @@ import { obstacles } from "./obstacles.js";
 export class multi extends game {
     adversaire;
     obstacles;
-    static tempsAjoutNewObstacle =1000;
+    static tempsAjoutNewObstacle = 1000;
     constructor() {
         super();
         game.setup = this.setup;
