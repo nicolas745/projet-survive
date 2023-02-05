@@ -4,7 +4,7 @@ import { game } from "./game.js";
 import { menu } from "./menu.js";
 import { multi } from "./multi.js";
 import { obstacles } from "./obstacles.js";
-import { io } from "./socket.js";
+import socket, { io } from "./socket.js";
 import { solo } from "./solo.js";
 export class online extends multi {
     static join = false
@@ -54,11 +54,12 @@ export class online extends multi {
         });
         cercle.socket.on("AdversaireDeconecter", () => {
         });
-        cercle.socket.on("AddObstacleAdversaire", (Dataobstacle) => {
-            this.adversaire.addobstacles(Dataobstacle.x, Dataobstacle.y, Dataobstacle.directionX, Dataobstacle.directionY)
+        cercle.socket.on("obstacles", (x,y,vec) => {
+            multi.adversaire.addobstacles(640+x, y, vec)
         });
         cercle.socket.on("PositionAdversaire", (DataAdversaire) => {
-            this.test(DataAdversaire);
+            multi.adversaire.adversaire.PosX = 640+DataAdversaire.PosX
+            multi.adversaire.adversaire.PosY = DataAdversaire.PosY
         });
 
         cercle.socket.on('disconnect', () => {
@@ -75,18 +76,22 @@ export class online extends multi {
     }
     editPosAdv(DataAdversaire) {
         this.adversaire.adversaire.PosY = DataAdversaire.posY;
-        this.adversaire.adversaire.PosY = DataAdversaire.posY;
+        this.adversaire.adversaire.PosX = DataAdversaire.posX;
     }
     funconline(adversaire, obstacles, sketch) {
         obstacles.position(adversaire.adversaire);
         let deplacement = false;
         adversaire.deplacement(deplacement);
     }
-
+    restart() {
+        menu.actif=true;
+        menu.select = "en attend de autre joueur"
+      }
     addobstacles(sketch) {
         if (solo.tempsAjoutNewObstacle > Math.pow(10, 2)) {
             solo.tempsAjoutNewObstacle = 0;
-            return new obstacles(1, sketch);
+            let obs=new obstacles(1, sketch);
+            return obs;
         }
         solo.tempsAjoutNewObstacle++;
     }

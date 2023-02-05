@@ -6,12 +6,6 @@ export class cercle {
     couleur = 'white'
     sketch;
     type = "p1"; //valeur p1 ou p2 qui corespont type de joueur
-    touche = {
-        leftKey: 37,
-        upKey: 38,
-        rightKey: 39,
-        downKey: 40
-    }
     Ckey = new key();
     //size est un nombre
     //couleur int ou string
@@ -28,6 +22,12 @@ export class cercle {
     }
     get PosY() {
         return this.y
+    }
+    set PosX(x) {
+        this.x = x
+    }
+    set PosY(y) {
+        this.y=y
     }
     set type(playeur) {
         this.type = playeur;
@@ -80,7 +80,7 @@ export class cercle {
         }
         if(typeof cercle.socket !== "undefined"){
             cercle.socket.emit("adversaire",{
-                "posX":this.posX,
+                "PosX":this.PosX,
                 "PosY":this.PosY
             });
         }
