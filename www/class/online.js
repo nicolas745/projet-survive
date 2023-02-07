@@ -32,6 +32,12 @@ export class online extends multi {
         menu.addbutton("en attend de autre joueur", "start", -10, 1, 1, function () {
             menu.actif = false;
         })
+        menu.addbutton("gameover", "restart", 1, 2, 2, function () {
+            game.startGame = true;
+            menu.actif = true;
+            menu.select = "en attend de autre joueur";
+            cercle.socket.emit("restart", undefined);
+        })
         menu.addbutton("Le jeux de survie", "exit", 2, 1, 1, () => {
             game.remove = true
             cercle.socket.disconnect();
@@ -54,11 +60,11 @@ export class online extends multi {
         });
         cercle.socket.on("AdversaireDeconecter", () => {
         });
-        cercle.socket.on("obstacles", (x,y,vec) => {
-            multi.adversaire.addobstacles(640+x, y, vec)
+        cercle.socket.on("obstacles", (x, y, vec) => {
+            multi.adversaire.addobstacles(640 + x, y, vec)
         });
         cercle.socket.on("PositionAdversaire", (DataAdversaire) => {
-            multi.adversaire.adversaire.PosX = 640+DataAdversaire.PosX
+            multi.adversaire.adversaire.PosX = 640 + DataAdversaire.PosX
             multi.adversaire.adversaire.PosY = DataAdversaire.PosY
         });
 
@@ -84,13 +90,13 @@ export class online extends multi {
         adversaire.deplacement(deplacement);
     }
     restart() {
-        menu.actif=true;
+        menu.actif = true;
         menu.select = "en attend de autre joueur"
-      }
+    }
     addobstacles(sketch) {
         if (solo.tempsAjoutNewObstacle > Math.pow(10, 2)) {
             solo.tempsAjoutNewObstacle = 0;
-            let obs=new obstacles(1, sketch);
+            let obs = new obstacles(1, sketch);
             return obs;
         }
         solo.tempsAjoutNewObstacle++;

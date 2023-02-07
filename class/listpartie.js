@@ -27,6 +27,15 @@ class listpartie {
             this.attent.push(data);
         }
     }
+    restart(userId) {
+        if (typeof this.listjoueur[userId] === "undefined") return;
+        if (this.listjoueur[userId].isrestart()) {
+            this.listjoueur[userId].prestart()
+        } else {
+            let adv = this.listjoueur[userId].getAdversaire(userId);
+            this.listjoueur[adv].restart();
+        }
+    }
     disconnect(userId) {
         this.attent = removeValueFromArray(userId, this.attent);
         if (this.listjoueur.hasOwnProperty(userId)) {

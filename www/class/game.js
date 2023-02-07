@@ -76,10 +76,6 @@ export class game {
       new menu(sketch);
       menu.addbutton("Le jeux de survie", "config", 0, 1, 1, () => {
       });
-      menu.addbutton("gameover", "restart", 1, 2, 2, function () {
-        game.startGame = true;
-        menu.actif = false;
-      })
     }
     sketch.draw = function () {
       if (game.remove) {

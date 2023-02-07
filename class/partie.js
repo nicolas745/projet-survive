@@ -18,7 +18,6 @@ class partie {
         this.io.to(this.getAdversaire(joueur)).emit("AdversaireDeconecter", joueur)
     }
     prestart() {
-        console.log(this.joueur1.id);
         this.io.to(this.joueur1.id).emit("AdversaireConnecter", this.joueur2.pseudo);
         this.io.to(this.joueur2.id).emit("AdversaireConnecter", this.joueur1.pseudo);
     }
