@@ -59,18 +59,14 @@ io.on('connection', (socket) => {
         partie.disconnect(socket.id, io);
     });
     socket.on("adversaire", (DataAdversaire) => {
-        if (typeof partie.listjoueur[socket.id] === "undefined") return;
+        if(typeof partie.listjoueur[socket.id]==="undefined") return;
         let idadv = partie.listjoueur[socket.id].getAdversaire(socket.id);
         io.to(idadv).emit("PositionAdversaire", DataAdversaire)
     })
-    socket.on("obstacles", (x, y, vec) => {
-        if (typeof partie.listjoueur[socket.id] === "undefined") return;
-        partie.listjoueur.restart();
-
-    })
-    socket.on("restart", () => {
-        if (typeof partie.listjoueur[socket.id] === "undefined") return;
-
+    socket.on("obstacles",(x,y,vec)=>{
+        if(typeof partie.listjoueur[socket.id]==="undefined") return;
+        let idadv = partie.listjoueur[socket.id].getAdversaire(socket.id);
+        io.to(idadv).emit("obstacles", x,y,vec)
     })
 });
 serveur.listen(port, host, () => {
