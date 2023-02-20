@@ -11,6 +11,12 @@ export class autreJoueur extends obstacles {
         this.adversaire = new cercle(640 + 320, 240, 50, 'white', sketch);
         this.adversaire.type = "p2";
     }
+    /**
+     * ca permet d'ajouter un obstacle
+     * @param {*} x postion x
+     * @param {*} y postion y
+     * @param {*} direction la direction en rad
+     */
     addobstacles(x, y, direction) {
         let newobstacle = new obstacles(0, this.sketch);
         newobstacle.addDirection(x, y, direction);

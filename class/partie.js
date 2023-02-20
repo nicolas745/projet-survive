@@ -14,8 +14,15 @@ class partie {
             return this.joueur1.id;
         }
     }
+    getdata(joueur) {
+        if (joueur === this.joueur1.id) {
+            return this.joueur2;
+        } else {
+            return this.joueur1;
+        }
+    }
     disconnect(joueur) {
-        this.io.to(this.getAdversaire(joueur)).emit("AdversaireDeconecter", joueur)
+        this.io.to(this.getAdversaire(joueur)).emit("AdversaireDeconecter", joueur);
     }
     prestart() {
         console.log(this.joueur1.id);

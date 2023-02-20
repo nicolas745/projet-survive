@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
     socket.join(socket.id);
     console.log("le user " + socket.id + " est connecter");
     socket.on("disconnect", () => {
-        partie.disconnect(socket.id, io);
+        partie.disconnect(socket.id);
         console.log(socket.id + "a quité la salle d'attent");
         console.log("le user " + socket.id + " vient de deconnecter");
     });
@@ -54,19 +54,22 @@ io.on('connection', (socket) => {
         console.log(socket.id + "a rejoint la salle d'attent");
         partie.addpartie(socket.id, pseudo);
     })
-    socket.on("left join", (pseudo) => {
+    socket.on("restart", (pseudo) => {
+        partie.restart(socket.id, pseudo);
+    })
+    socket.on("left join", () => {
         console.log(socket.id + "a quité la salle d'attent");
-        partie.disconnect(socket.id, io);
+        partie.disconnect(socket.id);
     });
     socket.on("adversaire", (DataAdversaire) => {
-        if(typeof partie.listjoueur[socket.id]==="undefined") return;
+        if (typeof partie.listjoueur[socket.id] === "undefined") return;
         let idadv = partie.listjoueur[socket.id].getAdversaire(socket.id);
         io.to(idadv).emit("PositionAdversaire", DataAdversaire)
     })
-    socket.on("obstacles",(x,y,vec)=>{
-        if(typeof partie.listjoueur[socket.id]==="undefined") return;
+    socket.on("obstacles", (x, y, vec) => {
+        if (typeof partie.listjoueur[socket.id] === "undefined") return;
         let idadv = partie.listjoueur[socket.id].getAdversaire(socket.id);
-        io.to(idadv).emit("obstacles", x,y,vec)
+        io.to(idadv).emit("obstacles", x, y, vec)
     })
 });
 serveur.listen(port, host, () => {

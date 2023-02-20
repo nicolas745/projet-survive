@@ -22,11 +22,7 @@ export class online extends multi {
             online.join = true;
             menu.gamefunc = function (sketch) {
                 sketch.text("P1 : " + document.getElementById("pseudo").value, sketch.width / 2, 45 + 90);
-                if (typeof autreJoueur.pseudo !== "undefined") {
-                    sketch.text("P2 : " + pseudo, sketch.width / 2, 45 + 180);
-                } else {
-                    sketch.text("P2 : ...", sketch.width / 2, 180);
-                }
+                sketch.text("P2 : ...", sketch.width / 2, 180);
             }
         })
         menu.addbutton("en attend de autre joueur", "start", -10, 1, 1, function () {
@@ -35,6 +31,10 @@ export class online extends multi {
         menu.addbutton("Le jeux de survie", "exit", 2, 1, 1, () => {
             game.remove = true
             cercle.socket.disconnect();
+        });
+        menu.addbutton("gameover", "restart", 1, 2, 2, function () {
+            cercle.socket.emit("restart", document.getElementById("pseudo").value);
+            menu.select = "en attend de autre joueur";
         });
         menu.addbutton("gameover", "exit", 0, 1, 2, function () {
             game.remove = true;
@@ -48,17 +48,17 @@ export class online extends multi {
         cercle.socket.on('connect', () => {
             online.connect = true;
         });
-        cercle.socket.on("AdversaireConnecter", (pseudo) => {
+        cercle.socket.on("AdversaireConnecter", () => {
             online.join = false;
             menu.actif = false;
         });
         cercle.socket.on("AdversaireDeconecter", () => {
         });
-        cercle.socket.on("obstacles", (x,y,vec) => {
-            multi.adversaire.addobstacles(640+x, y, vec)
+        cercle.socket.on("obstacles", (x, y, vec) => {
+            multi.adversaire.addobstacles(640 + x, y, vec)
         });
         cercle.socket.on("PositionAdversaire", (DataAdversaire) => {
-            multi.adversaire.adversaire.PosX = 640+DataAdversaire.PosX
+            multi.adversaire.adversaire.PosX = 640 + DataAdversaire.PosX
             multi.adversaire.adversaire.PosY = DataAdversaire.PosY
         });
 
@@ -84,13 +84,13 @@ export class online extends multi {
         adversaire.deplacement(deplacement);
     }
     restart() {
-        menu.actif=true;
+        menu.actif = true;
         menu.select = "en attend de autre joueur"
-      }
+    }
     addobstacles(sketch) {
         if (solo.tempsAjoutNewObstacle > Math.pow(10, 2)) {
             solo.tempsAjoutNewObstacle = 0;
-            let obs=new obstacles(1, sketch);
+            let obs = new obstacles(1, sketch);
             return obs;
         }
         solo.tempsAjoutNewObstacle++;

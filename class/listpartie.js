@@ -27,11 +27,21 @@ class listpartie {
             this.attent.push(data);
         }
     }
-    disconnect(userId) {
-        this.attent = removeValueFromArray(userId, this.attent);
+    restart(userId, pseudo) {
+        let data = {
+            id: userId,
+            pseudo: pseudo
+        }
         if (this.listjoueur.hasOwnProperty(userId)) {
-            let Partie;
-            Partie = this.listjoueur[userId];
+            data = this.listjoueur[userId].getdata(userId);
+            delete this.listjoueur[userId];
+        }
+        this.addpartie(data.id, data.pseudo);
+    }
+    disconnect(userId) {
+        this.attent.splice(0, 1);
+        if (this.listjoueur.hasOwnProperty(userId)) {
+            let Partie = this.listjoueur[userId];
             let adv = Partie.getAdversaire(userId);
             Partie.disconnect(userId);
             delete this.listjoueur[userId];

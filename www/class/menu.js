@@ -1,5 +1,4 @@
 import { cercle } from "./cercle.js";
-
 export class menu {
     static actif;
     static menu = {};
@@ -87,8 +86,17 @@ export class menu {
             this.selecButonY = 0;
         }
     }
-    static addbutton(menuname, text, posY, posX, divX, funcselect, gamefunc) {
-        this.gamefunc = gamefunc;
+    /**
+     * 
+     * @param {String} menuname nom du menu 
+     * @param {String} text text a afficher
+     * @param {Int} posY postion ligne
+     * @param {Int} posX postion en colone
+     * @param {Int} divX nombre de colone
+     * @param {Function} funcselect une function qui permet qui sexecute quand on appuillee sur le bouton
+     */
+    static addbutton(menuname, text, posY, posX, divX, funcselect) {
+        this.gamefunc = undefined;
         if (typeof this.menu[menuname] === "undefined") {
             this.menu[menuname] = [];
         }
